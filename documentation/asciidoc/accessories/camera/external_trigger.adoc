@@ -32,6 +32,8 @@ echo 1 > /sys/module/imx296/parameters/trigger_mode
 exit
 ----
 
+Notice: This command is valid for Bookworm; it is not available for pre-Bulleseye.
+
 ==== Raspberry Pi Pico Micropython Code
 
 [,python]
@@ -50,6 +52,25 @@ pwm.freq(framerate)
 
 pwm.duty_u16(int((1 - (shutter - 14) / frame_length) * 65535))
 ----
+
+==== Raspberry Pi 4 python Code(use GPIO#12)
+
+[,python]
+----
+
+import RPi.GPIO as GPIO
+import time
+
+framerate = 30
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(12, GPIO.OUT)
+pwm = GPIO.PWM(12, framerate)
+
+pwm.start(90)
+time.sleep(10)
+GPIO.cleanup(12)
+----
+
 
 The low pulsewidth is equal to the shutter time, and the frequency of the PWM equals the framerate.
 
